@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 #include "iostream"
-template <class T>
+template <typename T>
 void print()
 {
 	static T a = 0;
