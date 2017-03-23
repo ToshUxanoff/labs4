@@ -5,12 +5,12 @@ template <class T>
 void print()
 {
 	static T a = 0;
+	std::cout << a << ' ';
 	if (a == 100)
 	{
 		return;
 	}
 	a++;
-	std::cout << a << ' ';
 	print<T>();
 }
 int _tmain(int argc, _TCHAR* argv[])
