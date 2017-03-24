@@ -1,21 +1,23 @@
 
+
 #include "stdafx.h"
 #include "iostream"
 template <typename T>
-void print()
+void print(T& a)
 {
-	static T a = 0;
 	std::cout << a << ' ';
 	if (a == 100)
 	{
 		return;
 	}
 	a++;
-	print<T>();
+	print(a);
 }
 int _tmain(int argc, _TCHAR* argv[])
 {
-	print<int>();
+	double a = 0;
+	print<double>(a);
 	system("pause");
 	return 0;
 }
+
