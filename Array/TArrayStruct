@@ -5,9 +5,8 @@ class out_of_range
 {
 
 };
-template < class T
-	,std::size_t N
->struct Array
+template < class T, std::size_t N >
+struct Array
 {
 	using value_type = T;
 	using size_type = size_t;
@@ -19,19 +18,13 @@ private:
 public:
 	Array()
 	{}
-	Array(const Array <T, N> & obj)
-	{
-		memcpy(Data, obj.Data, N*sizeof(T));
-	}
 	Array(std::initializer_list<T> l) : Array() 
 	{
 		std::copy(l.begin(), l.end(), Data);
-	}
-		
-	
+	}	
 	reference at(size_type pos) const
 	{
-		if (pos <= N)
+		if (pos < N)
 		{
 			return Data[pos];
 		}
@@ -39,7 +32,7 @@ public:
 	}
 	const_reference at(size_type pos) 
 	{
-		if (pos <= N)
+		if (pos < N)
 		{
 			return Data[pos];
 		}
@@ -86,7 +79,7 @@ public:
 	{
 		return Data[N - 1];
 	}
-	reference data() const
+	T* data() const
 	{
 		return Data; 
 	}
@@ -98,6 +91,43 @@ public:
 		}
 	}
 
+	bool operator < (const Array& obj)
+	{
+		if (size() == obj.size())
+		{
+			size_t check = 0;
+			{
+				for (size_t i = 0; i < size(); ++i)
+				{
+					if (Data[i] < obj.Data[i]) //т.к. сравниваем лексикографически
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+		else if (size() < obj.size())
+		{
+			return true;
+		}
+		return false;
+	}
+	bool operator == (const Array& obj)
+	{
+		if (size() == obj.size())
+		{
+			for (size_t i = 0; i < size(); ++i)
+			{
+				if (Data[i] != obj.Data[i])
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 	void swap(Array<T, N> & obj) throw()
 	{
 		std::swap(Data, obj.Data);
