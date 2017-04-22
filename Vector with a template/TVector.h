@@ -1,5 +1,6 @@
 #ifndef __TVECTOR_INCLUDED__
 #define __TVECTOR_INCLUDED__
+#define _SCL_SECURE_NO_WARNINGS
 #include "iostream"
 
 class out_of_range : public std::exception
@@ -34,7 +35,7 @@ public:
 
 	~TVector()
 	{
-			delete[] Ptr;
+		delete[] Ptr;
 	}
 
 	bool empty() const throw()
@@ -56,7 +57,7 @@ public:
 	{
 		return Ptr;
 	}
-
+	
 	iterator end() const throw()
 	{
 		return Ptr + Count;
@@ -69,7 +70,10 @@ public:
 			return;
 		}
 		value_type* buf = new value_type[size];
-		memcpy(buf, Ptr, Count*sizeof(value_type));
+		for(size_t i = 0; i < Count; ++i)
+		{
+			buf[i] = Ptr[i];
+		}
 		delete[]Ptr;
 		InternalCapacity = size;
 		Ptr = buf;
@@ -78,10 +82,11 @@ public:
 
 	TVector(const TVector& rhs)
 	{
-		reserve (rhs.InternalCapacity);
+		reserve(rhs.InternalCapacity);
 		InternalCapacity = rhs.InternalCapacity;
 		Count = rhs.Count;
-		memcpy(Ptr, rhs.Ptr, InternalCapacity*sizeof(value_type));
+		std::copy(rhs.begin(), rhs.end(), Ptr)
+		
 	}
 
 	TVector& operator=(const TVector& rhs)
@@ -89,28 +94,28 @@ public:
 		reserve(rhs.InternalCapacity);
 		Count = rhs.Count;
 		InternalCapacity = rhs.InternalCapacity;
-		memcpy(Ptr, rhs.Ptr, Count * sizeof(value_type));
+		std::copy(rhs.begin(), rhs.end(),Ptr);
 		return *this;
 	}
 
 	void push_back(const value_type& value)
-	{	
+	{
 		if (InternalCapacity == 0)
 		{
 			reserve(1);
 		}
 		if (Count >= InternalCapacity)
 		{
-			InternalCapacity++;
+			InternalCapacity*=2;
 			reserve(InternalCapacity);
 		}
-			Ptr[Count] = value;
-			Count++;
+		Ptr[Count] = value;
+		Count++;
 	}
 
 	reference at(size_type index)
 	{
-		if (index > InternalCapacity||index < 0)
+		if (index > InternalCapacity || index < 0)
 		{
 			throw out_of_range();
 		}
@@ -148,7 +153,7 @@ public:
 
 	reference back()
 	{
-		return Ptr[Count-1];
+		return Ptr[Count - 1];
 	}
 
 	const_reference back() const
@@ -181,9 +186,9 @@ public:
 			throw std::exception();
 		}
 		if (count > Count)
-		{	
+		{
 			reserve(count);
-			for (int i = Count; i < count; ++i)
+			for (size_t i = Count; i < count; ++i)
 			{
 				Ptr[i] = value;
 			}
@@ -200,7 +205,7 @@ public:
 		}
 		Count++;
 		reserve(Count);
-		for (int i = Count - 1 ; i >= position; --i)
+		for (size_t i = Count - 1; i >= position ; --i)
 		{
 			Ptr[i] = Ptr[i - 1];
 		}
@@ -215,15 +220,15 @@ public:
 		{
 			throw out_of_range();
 		}
-		Count+=count;
+		Count += count;
 		reserve(Count);
-		for (int i = Count - 1; i >= position + count; --i)
+		for (size_t i = Count - 1; i >= position + count ; --i)
 		{
 			Ptr[i] = Ptr[i - count];
 		}
-		for (int i = 0; i < count; i++)
+		for (size_t i = 0; i < count; i++)
 		{
-			Ptr[position+i] = value;
+			Ptr[position + i] = value;
 		}
 	}
 
@@ -259,3 +264,4 @@ public:
 
 
 #endif // __TVECTOR_INCLUDED__
+
