@@ -70,7 +70,7 @@ public:
 			return;
 		}
 		value_type* buf = new value_type[size];
-		for(size_t i = 0; i < Count; ++i)
+		for(size_type i = 0; i < Count; ++i)
 		{
 			buf[i] = Ptr[i];
 		}
@@ -188,7 +188,7 @@ public:
 		if (count > Count)
 		{
 			reserve(count);
-			for (size_t i = Count; i < count; ++i)
+			for (size_type i = Count; i < count; ++i)
 			{
 				Ptr[i] = value;
 			}
@@ -205,7 +205,7 @@ public:
 		}
 		Count++;
 		reserve(Count);
-		for (size_t i = Count - 1; i >= position ; --i)
+		for (size_type i = Count - 1; i >= position ; --i)
 		{
 			Ptr[i] = Ptr[i - 1];
 		}
@@ -222,11 +222,11 @@ public:
 		}
 		Count += count;
 		reserve(Count);
-		for (size_t i = Count - 1; i >= position + count ; --i)
+		for (size_type i = Count - 1; i >= position + count ; --i)
 		{
 			Ptr[i] = Ptr[i - count];
 		}
-		for (size_t i = 0; i < count; i++)
+		for (size_type i = 0; i < count; i++)
 		{
 			Ptr[position + i] = value;
 		}
@@ -238,7 +238,7 @@ public:
 		{
 			throw out_of_range();
 		}
-		for (int i = 0; i + pos < Ptr + Count; ++i)
+		for (size_t i = 0; i + pos < Ptr + Count; ++i)
 		{
 
 			*(pos + i) = *(pos + i + 1);
@@ -264,4 +264,3 @@ public:
 
 
 #endif // __TVECTOR_INCLUDED__
-
